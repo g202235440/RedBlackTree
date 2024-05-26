@@ -1,2 +1,18 @@
-﻿  redblack.cpp
+﻿  redblack.c
+C:\Users\Admin\source\repos\redblack\redblack\redblack.c(394,45): warning C4474: 'scanf_s' : 서식 문자열에 전달된 인수가 너무 많습니다.
+  C:\Users\Admin\source\repos\redblack\redblack\redblack.c(394,45):
+  자리 표시자 및 해당 매개 변수에는 variadic 인수가 1개 필요하지만 2개가 제공되었습니다.
+  
+C:\Users\Admin\source\repos\redblack\redblack\redblack.c(418,41): warning C4474: 'scanf_s' : 서식 문자열에 전달된 인수가 너무 많습니다.
+  C:\Users\Admin\source\repos\redblack\redblack\redblack.c(418,41):
+  자리 표시자 및 해당 매개 변수에는 variadic 인수가 1개 필요하지만 2개가 제공되었습니다.
+  
+C:\Users\Admin\source\repos\redblack\redblack\redblack.c(429,41): warning C4474: 'scanf_s' : 서식 문자열에 전달된 인수가 너무 많습니다.
+  C:\Users\Admin\source\repos\redblack\redblack\redblack.c(429,41):
+  자리 표시자 및 해당 매개 변수에는 variadic 인수가 1개 필요하지만 2개가 제공되었습니다.
+  
+C:\Users\Admin\source\repos\redblack\redblack\redblack.c(440,45): warning C4474: 'scanf_s' : 서식 문자열에 전달된 인수가 너무 많습니다.
+  C:\Users\Admin\source\repos\redblack\redblack\redblack.c(440,45):
+  자리 표시자 및 해당 매개 변수에는 variadic 인수가 1개 필요하지만 2개가 제공되었습니다.
+  
   redblack.vcxproj -> C:\Users\Admin\source\repos\redblack\x64\Debug\redblack.exe
