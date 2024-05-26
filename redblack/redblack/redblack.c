@@ -4,307 +4,307 @@
 
 struct node {
     int color; // red = 1, black = 0
-    int data; // data °ª key °ª
+    int data; // data ê°’ key ê°’
     struct node* p, * left, * right;
 };
 
-typedef struct rbtree {//root¿Í nil±¸Á¶Ã¼
+typedef struct rbtree {//rootì™€ nilêµ¬ì¡°ì²´
     struct node* root;
     struct node* nil;
 } rbtree;
 
 
-struct node* create_node(rbtree* T, int data, int color) {//³ëµå¸¸ µå´Â ±¸°£
+struct node* create_node(rbtree* T, int data, int color) {//ë…¸ë“œë§Œ ë“œëŠ” êµ¬ê°„
     struct node* n = (struct node*)malloc(sizeof(struct node));
-    n->data = data;//µ¥ÀÌÅÍ °ª 
-    n->color = color;//»ö
-    n->p = T->nil;//±âº»ÀûÀ¸·Î ¸¸µé¾îÁø ³ëµå´Â nilÀ» °¡¸®Å²´Ù
-    n->left = T->nil; //±âº»ÀûÀ¸·Î ¸¸µé¾îÁø ³ëµå´Â nilÀ» °¡¸®Å²´Ù
-    n->right = T->nil; //±âº»ÀûÀ¸·Î ¸¸µé¾îÁø ³ëµå´Â nilÀ» °¡¸®Å²´Ù ³ªÁß¿¡ ¿¬°áÇØÁÜ
+    n->data = data;//ë°ì´í„° ê°’ 
+    n->color = color;//ìƒ‰
+    n->p = T->nil;//ê¸°ë³¸ì ìœ¼ë¡œ ë§Œë“¤ì–´ì§„ ë…¸ë“œëŠ” nilì„ ê°€ë¦¬í‚¨ë‹¤
+    n->left = T->nil; //ê¸°ë³¸ì ìœ¼ë¡œ ë§Œë“¤ì–´ì§„ ë…¸ë“œëŠ” nilì„ ê°€ë¦¬í‚¨ë‹¤
+    n->right = T->nil; //ê¸°ë³¸ì ìœ¼ë¡œ ë§Œë“¤ì–´ì§„ ë…¸ë“œëŠ” nilì„ ê°€ë¦¬í‚¨ë‹¤ ë‚˜ì¤‘ì— ì—°ê²°í•´ì¤Œ
     return n;
 }
 
 
-void LeftR(rbtree* T, struct node* x) {//ÁÂÈ¸Àü ÇÔ¼ö
-    struct node* y = x->right;//y´Â xÀÇ ¿À¸¥ÂÊ ½±°Ô ¸»ÇØ¼­ x°¡ À§¿¡ ÀÖ´Ù´Â ¶æ
-    x->right = y->left;//x¿À¸¥ÂÊÀº yÀÇ ¿ŞÂÊ (ÁÂÈ¸Àü ÁØºñ¸¦ À§ÇØ yÀÇ ¿ŞÂÊÀ» xÀÇ ¿À¸¥ÂÊ °ª¿¡ »ğÀÔ)
-    if (y->left != T->nil) {//yÀÇ ¿ŞÂÊÀÌ T->nillÀÌ ¾Æ´Ï¸é (¾Æ¹«°Íµµ ¾øÁö ¾ÊÀ¸¸é) 
-        y->left->p = x;//yÀÇ ¿ŞÂÊÀÇ ºÎ¸ğ´Â (¿ø·¡ y¸¦ °¡¸®Å°´ø °ªÀº) x¸¦ °¡¸®Å²´Ù
+void LeftR(rbtree* T, struct node* x) {//ì¢ŒíšŒì „ í•¨ìˆ˜
+    struct node* y = x->right;//yëŠ” xì˜ ì˜¤ë¥¸ìª½ ì‰½ê²Œ ë§í•´ì„œ xê°€ ìœ„ì— ìˆë‹¤ëŠ” ëœ»
+    x->right = y->left;//xì˜¤ë¥¸ìª½ì€ yì˜ ì™¼ìª½ (ì¢ŒíšŒì „ ì¤€ë¹„ë¥¼ ìœ„í•´ yì˜ ì™¼ìª½ì„ xì˜ ì˜¤ë¥¸ìª½ ê°’ì— ì‚½ì…)
+    if (y->left != T->nil) {//yì˜ ì™¼ìª½ì´ T->nillì´ ì•„ë‹ˆë©´ (ì•„ë¬´ê²ƒë„ ì—†ì§€ ì•Šìœ¼ë©´) 
+        y->left->p = x;//yì˜ ì™¼ìª½ì˜ ë¶€ëª¨ëŠ” (ì›ë˜ yë¥¼ ê°€ë¦¬í‚¤ë˜ ê°’ì€) xë¥¼ ê°€ë¦¬í‚¨ë‹¤
     }
-    y->p = x->p;//yÀÇ ºÎ¸ğ´Â xÀÇ ºÎ¸ğ°¡ µÈ´Ù ÀÌÁ¦ y°¡ ´õ À§¿¡ ÀÖ°Ô µÊ
-    if (x->p == T->nil) {//xÀÇ ºÎ¸ğ°¡ nillÀÌ¸é
-        T->root = y;//ÀÌÁ¦ y´Â ·çÆ®³ëµå°¡ µÈ´Ù
+    y->p = x->p;//yì˜ ë¶€ëª¨ëŠ” xì˜ ë¶€ëª¨ê°€ ëœë‹¤ ì´ì œ yê°€ ë” ìœ„ì— ìˆê²Œ ë¨
+    if (x->p == T->nil) {//xì˜ ë¶€ëª¨ê°€ nillì´ë©´
+        T->root = y;//ì´ì œ yëŠ” ë£¨íŠ¸ë…¸ë“œê°€ ëœë‹¤
     }
-    else if (x == x->p->left) {//¸¸¾à x¿Í xÀÇ ºÎ¸ğÀÇ ¿ŞÂÊÀÌ °°À¸¸é
-        x->p->left = y;//xÀÇ ºÎ¸ğÀÇ ¿ŞÂÊÀº yÀÌ´Ù
+    else if (x == x->p->left) {//ë§Œì•½ xì™€ xì˜ ë¶€ëª¨ì˜ ì™¼ìª½ì´ ê°™ìœ¼ë©´
+        x->p->left = y;//xì˜ ë¶€ëª¨ì˜ ì™¼ìª½ì€ yì´ë‹¤
     }
     else {
-        x->p->right = y;//xÀÇ ºÎ¸ğÀÇ ¿À¸¥ÂÊÀº yÀÌ´Ù
+        x->p->right = y;//xì˜ ë¶€ëª¨ì˜ ì˜¤ë¥¸ìª½ì€ yì´ë‹¤
     }
-    y->left = x;//yÀÇ ¿ŞÂÊ°ªÀº x°¡ µµ°í
-    x->p = y;//¸¶Áö¸·À¸·Î xÀÇ ºÎ¸ğ´Â y·Î ¿¬°áÇÑ´Ù
+    y->left = x;//yì˜ ì™¼ìª½ê°’ì€ xê°€ ë„ê³ 
+    x->p = y;//ë§ˆì§€ë§‰ìœ¼ë¡œ xì˜ ë¶€ëª¨ëŠ” yë¡œ ì—°ê²°í•œë‹¤
 }
 
 
-void RightR(rbtree* T, struct node* y) {//¿ìÈ¸Àü ÇÔ¼ö
-    struct node* x = y->left;//x´Â yÀÇ ¿ŞÂÊ ½±°Ô ¸»ÇØ¼­ y°¡ À§¿¡ ÀÖ´Ù´Â ¶æ
-    y->left = x->right;//y¿ŞÂÊÀº xÀÇ ¿À¸¥ÂÊ (¿ìÈ¸Àü ÁØºñ¸¦ À§ÇØ xÀÇ ¿À¸¥ÂÊÀ» yÀÇ¿ŞÂÊ °ª¿¡ »ğÀÔ)
-    if (x->right != T->nil) {//xÀÇ ¿À¸¥ÂÊÀÌ T->nillÀÌ ¾Æ´Ï¸é (¾Æ¹«°Íµµ ¾øÁö ¾ÊÀ¸¸é) 
-        x->right->p = y;//xÀÇ ¿À¸¥ÂÊÀÇ ºÎ¸ğ´Â (¿ø·¡ x¸¦ °¡¸®Å°´ø °ªÀº) y¸¦ °¡¸®Å²´Ù
+void RightR(rbtree* T, struct node* y) {//ìš°íšŒì „ í•¨ìˆ˜
+    struct node* x = y->left;//xëŠ” yì˜ ì™¼ìª½ ì‰½ê²Œ ë§í•´ì„œ yê°€ ìœ„ì— ìˆë‹¤ëŠ” ëœ»
+    y->left = x->right;//yì™¼ìª½ì€ xì˜ ì˜¤ë¥¸ìª½ (ìš°íšŒì „ ì¤€ë¹„ë¥¼ ìœ„í•´ xì˜ ì˜¤ë¥¸ìª½ì„ yì˜ì™¼ìª½ ê°’ì— ì‚½ì…)
+    if (x->right != T->nil) {//xì˜ ì˜¤ë¥¸ìª½ì´ T->nillì´ ì•„ë‹ˆë©´ (ì•„ë¬´ê²ƒë„ ì—†ì§€ ì•Šìœ¼ë©´) 
+        x->right->p = y;//xì˜ ì˜¤ë¥¸ìª½ì˜ ë¶€ëª¨ëŠ” (ì›ë˜ xë¥¼ ê°€ë¦¬í‚¤ë˜ ê°’ì€) yë¥¼ ê°€ë¦¬í‚¨ë‹¤
     }
-    x->p = y->p;//xÀÇ ºÎ¸ğ´Â yÀÇ ºÎ¸ğ°¡ µÈ´Ù ÀÌÁ¦ x°¡ ´õ À§¿¡ ÀÖ°Ô µÊ
-    if (y->p == T->nil) {//yÀÇ ºÎ¸ğ°¡ nillÀÌ¸é
-        T->root = x;//ÀÌÁ¦ x´Â ·çÆ®³ëµå°¡ µÈ´Ù
+    x->p = y->p;//xì˜ ë¶€ëª¨ëŠ” yì˜ ë¶€ëª¨ê°€ ëœë‹¤ ì´ì œ xê°€ ë” ìœ„ì— ìˆê²Œ ë¨
+    if (y->p == T->nil) {//yì˜ ë¶€ëª¨ê°€ nillì´ë©´
+        T->root = x;//ì´ì œ xëŠ” ë£¨íŠ¸ë…¸ë“œê°€ ëœë‹¤
     }
-    else if (y == y->p->right) {//¸¸¾à y¿Í yÀÇ ºÎ¸ğÀÇ ¿À¸¥ÂÊÀÌ °°À¸¸é
-        y->p->right = x;//yÀÇ ºÎ¸ğÀÇ ¿ŞÂÊÀº xÀÌ´Ù
+    else if (y == y->p->right) {//ë§Œì•½ yì™€ yì˜ ë¶€ëª¨ì˜ ì˜¤ë¥¸ìª½ì´ ê°™ìœ¼ë©´
+        y->p->right = x;//yì˜ ë¶€ëª¨ì˜ ì™¼ìª½ì€ xì´ë‹¤
     }
     else {
-        y->p->left = x;//yÀÇ ºÎ¸ğÀÇ ¿À¸¥ÂÊÀº yÀÌ´Ù
+        y->p->left = x;//yì˜ ë¶€ëª¨ì˜ ì˜¤ë¥¸ìª½ì€ yì´ë‹¤
     }
-    x->right = y;//xÀÇ ¿À¸¥ÂÊ°ªÀº y°¡ µµ°í
-    y->p = x;//¸¶Áö¸·À¸·Î yÀÇ ºÎ¸ğ´Â x·Î ¿¬°áÇÑ´Ù
+    x->right = y;//xì˜ ì˜¤ë¥¸ìª½ê°’ì€ yê°€ ë„ê³ 
+    y->p = x;//ë§ˆì§€ë§‰ìœ¼ë¡œ yì˜ ë¶€ëª¨ëŠ” xë¡œ ì—°ê²°í•œë‹¤
 }
 
 
-void RBInsertFixup(rbtree* T, struct node* z) {//RBinsertFixupÇÔ¼ö
-    while (z->p->color == 1) { //¼±ÅÃÇÑ ³ëµåÀÇ ºÎ¸ğ°¡ »öÀÌ »¡°­ÀÏ¶§ ( ¿Ö³Ä¸é ¹«Á¶°Ç »¡°­À¸·Î ³ëµå°¡ µé¾î°¡±â ¶§¹®¿¡ ÀÌ¶§ ¿À·ù°¡ »ı±è)
-        if (z->p == z->p->p->left) {//zÀÇ ºÎ¸ğ°¡ zÀÇ ºÎ¸ğÀÇ ºÎ¸ğÀÇ ¿ŞÂÊ ÀÏ °æ¿ì 
-            struct node* y = z->p->p->right; //y¸¦ ¸¸µé°í y´Â zÀÇ ºÎ¸ğÀÇ º¸¸ğÀÇ ¿À¸¥ÂÊ (»ïÃÌ?)
-            if (y->color == 1) { // »ïÃÌÀÇ »öÀÌ »¡°­ÀÏ °æ¿ì
-                z->p->color = 0; //zÀÇ ºÎ¸ğÀÇ »ıÀº °ËÁ¤À¸·Î ¹Ù²Ù°í
-                y->color = 0;//»ïÃÌÀÇ »ö¶ÇÇÑ °ËÁ¤À¸·Î ¹Ù²Ş
-                z->p->p->color = 1;//zÀÇ ºÎ¸ğÀÇ ºÎ¸ğÀÇ »öÀº »¡°­À¸·Î ¹Ù²Ş
-                z = z->p->p;//ÀÌÁ¦ ¾Æ·¡ÂÊ¿¡¼± ¹®Á¦°¡ ÇØ°áµÇ¾úÀ¸¹Ç·Î zÀÇ Á¶ºÎ¸ğ¸¦ z·Î ¸¸µé°í ¹İº¹¹®À» ´Ù½Ã ½ÃÀÛÇÑ´Ù
+void RBInsertFixup(rbtree* T, struct node* z) {//RBinsertFixupí•¨ìˆ˜
+    while (z->p->color == 1) { //ì„ íƒí•œ ë…¸ë“œì˜ ë¶€ëª¨ê°€ ìƒ‰ì´ ë¹¨ê°•ì¼ë•Œ ( ì™œëƒë©´ ë¬´ì¡°ê±´ ë¹¨ê°•ìœ¼ë¡œ ë…¸ë“œê°€ ë“¤ì–´ê°€ê¸° ë•Œë¬¸ì— ì´ë•Œ ì˜¤ë¥˜ê°€ ìƒê¹€)
+        if (z->p == z->p->p->left) {//zì˜ ë¶€ëª¨ê°€ zì˜ ë¶€ëª¨ì˜ ë¶€ëª¨ì˜ ì™¼ìª½ ì¼ ê²½ìš° 
+            struct node* y = z->p->p->right; //yë¥¼ ë§Œë“¤ê³  yëŠ” zì˜ ë¶€ëª¨ì˜ ë³´ëª¨ì˜ ì˜¤ë¥¸ìª½ (ì‚¼ì´Œ?)
+            if (y->color == 1) { // ì‚¼ì´Œì˜ ìƒ‰ì´ ë¹¨ê°•ì¼ ê²½ìš°
+                z->p->color = 0; //zì˜ ë¶€ëª¨ì˜ ìƒì€ ê²€ì •ìœ¼ë¡œ ë°”ê¾¸ê³ 
+                y->color = 0;//ì‚¼ì´Œì˜ ìƒ‰ë˜í•œ ê²€ì •ìœ¼ë¡œ ë°”ê¿ˆ
+                z->p->p->color = 1;//zì˜ ë¶€ëª¨ì˜ ë¶€ëª¨ì˜ ìƒ‰ì€ ë¹¨ê°•ìœ¼ë¡œ ë°”ê¿ˆ
+                z = z->p->p;//ì´ì œ ì•„ë˜ìª½ì—ì„  ë¬¸ì œê°€ í•´ê²°ë˜ì—ˆìœ¼ë¯€ë¡œ zì˜ ì¡°ë¶€ëª¨ë¥¼ zë¡œ ë§Œë“¤ê³  ë°˜ë³µë¬¸ì„ ë‹¤ì‹œ ì‹œì‘í•œë‹¤
             }
             else {
-                if (z == z->p->right) { //z´Â zÀÇ ºÎ¸ğÀÇ ¿À¸¥ÂÊÀÏ°æ¿ì
-                    z = z->p;// z´Â zÀÇ ºÎ¸ğ°¡ µÈ´Ù
-                    LeftR(T, z);// ÁÂÈ¸Àü 
+                if (z == z->p->right) { //zëŠ” zì˜ ë¶€ëª¨ì˜ ì˜¤ë¥¸ìª½ì¼ê²½ìš°
+                    z = z->p;// zëŠ” zì˜ ë¶€ëª¨ê°€ ëœë‹¤
+                    LeftR(T, z);// ì¢ŒíšŒì „ 
                 }
-                z->p->color = 0;//zÀÇ ºÎ¸ğÀÇ »öÀº °ËÁ¤ÀÌ µÊ
-                z->p->p->color = 1;//zÀÇ ºÎ¸ğÀÇ ºÎ¸ğÀÇ »öÀº »¡°­ÀÌ µÈ´Ù
-                RightR(T, z->p->p);//zÀÇ ºÎ¸ğÀÇ ºÎ¸ğ¸¦ ¿ìÈ¸Àü
+                z->p->color = 0;//zì˜ ë¶€ëª¨ì˜ ìƒ‰ì€ ê²€ì •ì´ ë¨
+                z->p->p->color = 1;//zì˜ ë¶€ëª¨ì˜ ë¶€ëª¨ì˜ ìƒ‰ì€ ë¹¨ê°•ì´ ëœë‹¤
+                RightR(T, z->p->p);//zì˜ ë¶€ëª¨ì˜ ë¶€ëª¨ë¥¼ ìš°íšŒì „
             }
         }
         else {
-            struct node* y = z->p->p->left; //zÀÇ ºÎ¸ğÀÇ ºÎ¸ğÀÇ ¿ŞÂÊÀº y¶ó´Â ³ëµå »ı¼º
-            if (y->color == 1) { //yÀÇ »öÀº »¡°­
-                z->p->color = 0;//zÀÇ ºÎ¸ğÀÇ »öÀº °ËÁ¤
-                y->color = 0;//yÀÇ »öÀº °ËÁ¤
-                z->p->p->color = 1;//zÀÇ ºÎ¸ğÀÇ ºÎ¸ğÀÇ »öÀº »¡°­
-                z = z->p->p;//ÀÌÁ¦ ¾Æ·¡ÂÊ¿¡¼± ¹®Á¦°¡ ÇØ°áµÇ¾úÀ¸¹Ç·Î zÀÇ Á¶ºÎ¸ğ¸¦ z·Î ¸¸µé°í ¹İº¹¹®À» ´Ù½Ã ½ÃÀÛÇÑ´Ù
+            struct node* y = z->p->p->left; //zì˜ ë¶€ëª¨ì˜ ë¶€ëª¨ì˜ ì™¼ìª½ì€ yë¼ëŠ” ë…¸ë“œ ìƒì„±
+            if (y->color == 1) { //yì˜ ìƒ‰ì€ ë¹¨ê°•
+                z->p->color = 0;//zì˜ ë¶€ëª¨ì˜ ìƒ‰ì€ ê²€ì •
+                y->color = 0;//yì˜ ìƒ‰ì€ ê²€ì •
+                z->p->p->color = 1;//zì˜ ë¶€ëª¨ì˜ ë¶€ëª¨ì˜ ìƒ‰ì€ ë¹¨ê°•
+                z = z->p->p;//ì´ì œ ì•„ë˜ìª½ì—ì„  ë¬¸ì œê°€ í•´ê²°ë˜ì—ˆìœ¼ë¯€ë¡œ zì˜ ì¡°ë¶€ëª¨ë¥¼ zë¡œ ë§Œë“¤ê³  ë°˜ë³µë¬¸ì„ ë‹¤ì‹œ ì‹œì‘í•œë‹¤
             }
             else {
-                if (z == z->p->left) { //z´Â zÀÇ ºÎ¸ğÀÇ ¿ŞÂÊ
-                    z = z->p;//z´Â zÀÇ ºÎ¸ğ·Î ¹Ù²Ş
-                    RightR(T, z); //ÁÂÈ¸Àü
+                if (z == z->p->left) { //zëŠ” zì˜ ë¶€ëª¨ì˜ ì™¼ìª½
+                    z = z->p;//zëŠ” zì˜ ë¶€ëª¨ë¡œ ë°”ê¿ˆ
+                    RightR(T, z); //ì¢ŒíšŒì „
                 }
-                z->p->color = 0;//zÀÇ ºÎ¸ğÀÇ »öÀº °ËÁ¤ 
-                z->p->p->color = 1;//zÀÇ ºÎ¸ğÀÇ ºÎ¸ğÀÇ »öÀº »¡°­
-                LeftR(T, z->p->p);//zÀÇ ºÎ¸ğÀÇ ºÎ¸ğ¸¦ ÁÂÈ¸Àü
+                z->p->color = 0;//zì˜ ë¶€ëª¨ì˜ ìƒ‰ì€ ê²€ì • 
+                z->p->p->color = 1;//zì˜ ë¶€ëª¨ì˜ ë¶€ëª¨ì˜ ìƒ‰ì€ ë¹¨ê°•
+                LeftR(T, z->p->p);//zì˜ ë¶€ëª¨ì˜ ë¶€ëª¨ë¥¼ ì¢ŒíšŒì „
             }
         }
     }
-    T->root->color = 0; //RBTREEÀÇ ·çÆ®ÀÇ »ıÀ» °ËÁ¤À¸·Î ¹Ù²Ş
+    T->root->color = 0; //RBTREEì˜ ë£¨íŠ¸ì˜ ìƒì„ ê²€ì •ìœ¼ë¡œ ë°”ê¿ˆ
 }
-////////////////////////////////////////³ª¸ÓÁö´Â ³»ÀÏ  ÇÏÀÚ
+////////////////////////////////////////ë‚˜ë¨¸ì§€ëŠ” ë‚´ì¼  í•˜ì
 // 
 // 
 // 
 // 
-// ·¹µå-ºí·¢ Æ®¸®¿¡ ³ëµå¸¦ »ğÀÔÇÏ´Â ÇÔ¼ö
+// ë ˆë“œ-ë¸”ë™ íŠ¸ë¦¬ì— ë…¸ë“œë¥¼ ì‚½ì…í•˜ëŠ” í•¨ìˆ˜
 void RBInsert(rbtree* T, struct node* z) {
-    struct node* y = T->nil; // y¸¦ nil·Î ÃÊ±âÈ­
-    struct node* x = T->root; // x¸¦ ·çÆ® ³ëµå·Î ÃÊ±âÈ­
-    while (x != T->nil) { // x°¡ nilÀÌ ¾Æ´Ñ µ¿¾È ¹İº¹
-        y = x; // y¸¦ x·Î ¼³Á¤
-        if (z->data < x->data) { // zÀÇ µ¥ÀÌÅÍ°¡ xÀÇ µ¥ÀÌÅÍº¸´Ù ÀÛÀ¸¸é
-            x = x->left; // x¸¦ ¿ŞÂÊ ÀÚ½ÄÀ¸·Î ¼³Á¤
+    struct node* y = T->nil; // yë¥¼ nilë¡œ ì´ˆê¸°í™”
+    struct node* x = T->root; // xë¥¼ ë£¨íŠ¸ ë…¸ë“œë¡œ ì´ˆê¸°í™”
+    while (x != T->nil) { // xê°€ nilì´ ì•„ë‹Œ ë™ì•ˆ ë°˜ë³µ
+        y = x; // yë¥¼ xë¡œ ì„¤ì •
+        if (z->data < x->data) { // zì˜ ë°ì´í„°ê°€ xì˜ ë°ì´í„°ë³´ë‹¤ ì‘ìœ¼ë©´
+            x = x->left; // xë¥¼ ì™¼ìª½ ìì‹ìœ¼ë¡œ ì„¤ì •
         }
         else {
-            x = x->right; // x¸¦ ¿À¸¥ÂÊ ÀÚ½ÄÀ¸·Î ¼³Á¤
+            x = x->right; // xë¥¼ ì˜¤ë¥¸ìª½ ìì‹ìœ¼ë¡œ ì„¤ì •
         }
     }
-    z->p = y; // zÀÇ ºÎ¸ğ¸¦ y·Î ¼³Á¤
-    if (y == T->nil) { // y°¡ nilÀÌ¸é
-        T->root = z; // z¸¦ ·çÆ® ³ëµå·Î ¼³Á¤
+    z->p = y; // zì˜ ë¶€ëª¨ë¥¼ yë¡œ ì„¤ì •
+    if (y == T->nil) { // yê°€ nilì´ë©´
+        T->root = z; // zë¥¼ ë£¨íŠ¸ ë…¸ë“œë¡œ ì„¤ì •
     }
-    else if (z->data < y->data) { // zÀÇ µ¥ÀÌÅÍ°¡ yÀÇ µ¥ÀÌÅÍº¸´Ù ÀÛÀ¸¸é
-        y->left = z; // yÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» z·Î ¼³Á¤
+    else if (z->data < y->data) { // zì˜ ë°ì´í„°ê°€ yì˜ ë°ì´í„°ë³´ë‹¤ ì‘ìœ¼ë©´
+        y->left = z; // yì˜ ì™¼ìª½ ìì‹ì„ zë¡œ ì„¤ì •
     }
     else {
-        y->right = z; // yÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» z·Î ¼³Á¤
+        y->right = z; // yì˜ ì˜¤ë¥¸ìª½ ìì‹ì„ zë¡œ ì„¤ì •
     }
-    z->left = T->nil; // zÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» nil·Î ¼³Á¤
-    z->right = T->nil; // zÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» nil·Î ¼³Á¤
-    z->color = 1; // z¸¦ »¡°£»öÀ¸·Î ¼³Á¤
-    RBInsertFixup(T, z); // »ğÀÔ ÈÄ ¼Ó¼º º¹±¸ ÇÔ¼ö È£Ãâ
+    z->left = T->nil; // zì˜ ì™¼ìª½ ìì‹ì„ nilë¡œ ì„¤ì •
+    z->right = T->nil; // zì˜ ì˜¤ë¥¸ìª½ ìì‹ì„ nilë¡œ ì„¤ì •
+    z->color = 1; // zë¥¼ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ì„¤ì •
+    RBInsertFixup(T, z); // ì‚½ì… í›„ ì†ì„± ë³µêµ¬ í•¨ìˆ˜ í˜¸ì¶œ
 }
 
-//±³Ã¼ ÇÔ¼ö
+//êµì²´ í•¨ìˆ˜
 void RBTransplant(rbtree* T, struct node* u, struct node* v) {
-    if (u->p == T->nil) { // uÀÇ ºÎ¸ğ°¡ nilÀÌ¸é
-        T->root = v; // v¸¦ ·çÆ® ³ëµå·Î ¼³Á¤
+    if (u->p == T->nil) { // uì˜ ë¶€ëª¨ê°€ nilì´ë©´
+        T->root = v; // vë¥¼ ë£¨íŠ¸ ë…¸ë“œë¡œ ì„¤ì •
     }
-    else if (u == u->p->left) { // u°¡ ºÎ¸ğÀÇ ¿ŞÂÊ ÀÚ½ÄÀÌ¸é
-        u->p->left = v; // ºÎ¸ğÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» v·Î ¼³Á¤
+    else if (u == u->p->left) { // uê°€ ë¶€ëª¨ì˜ ì™¼ìª½ ìì‹ì´ë©´
+        u->p->left = v; // ë¶€ëª¨ì˜ ì™¼ìª½ ìì‹ì„ vë¡œ ì„¤ì •
     }
     else {
-        u->p->right = v; // ºÎ¸ğÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» v·Î ¼³Á¤
+        u->p->right = v; // ë¶€ëª¨ì˜ ì˜¤ë¥¸ìª½ ìì‹ì„ vë¡œ ì„¤ì •
     }
-    v->p = u->p; // vÀÇ ºÎ¸ğ¸¦ uÀÇ ºÎ¸ğ·Î ¼³Á¤
+    v->p = u->p; // vì˜ ë¶€ëª¨ë¥¼ uì˜ ë¶€ëª¨ë¡œ ì„¤ì •
 }
 
-// ¼­ºêÆ®¸®¿¡¼­ ÃÖ¼Ò°ªÀ» Ã£´Â ÇÔ¼ö
+// ì„œë¸ŒíŠ¸ë¦¬ì—ì„œ ìµœì†Œê°’ì„ ì°¾ëŠ” í•¨ìˆ˜
 struct node* TreeMinimum(rbtree* T, struct node* x) {
-    while (x->left != T->nil) { // xÀÇ ¿ŞÂÊ ÀÚ½ÄÀÌ nilÀÌ ¾Æ´Ò µ¿¾È ¹İº¹
-        x = x->left; // x¸¦ ¿ŞÂÊ ÀÚ½ÄÀ¸·Î ¼³Á¤
+    while (x->left != T->nil) { // xì˜ ì™¼ìª½ ìì‹ì´ nilì´ ì•„ë‹ ë™ì•ˆ ë°˜ë³µ
+        x = x->left; // xë¥¼ ì™¼ìª½ ìì‹ìœ¼ë¡œ ì„¤ì •
     }
-    return x; // ÃÖ¼Ò°ª ³ëµå ¹İÈ¯
+    return x; // ìµœì†Œê°’ ë…¸ë“œ ë°˜í™˜
 }
 struct node* TreeMaximum(rbtree* T, struct node* x) {
-    while (x->right != T->nil) { // xÀÇ ¿ŞÂÊ ÀÚ½ÄÀÌ nilÀÌ ¾Æ´Ò µ¿¾È ¹İº¹
-        x = x->right; // x¸¦ ¿ŞÂÊ ÀÚ½ÄÀ¸·Î ¼³Á¤
+    while (x->right != T->nil) { // xì˜ ì™¼ìª½ ìì‹ì´ nilì´ ì•„ë‹ ë™ì•ˆ ë°˜ë³µ
+        x = x->right; // xë¥¼ ì™¼ìª½ ìì‹ìœ¼ë¡œ ì„¤ì •
     }
-    return x; // ÃÖ´ë°ª ³ëµå ¹İÈ¯
+    return x; // ìµœëŒ€ê°’ ë…¸ë“œ ë°˜í™˜
 }
 
 struct node* SearchRBtree(rbtree* T, int value) {
-    struct node* x = T->root;//·çÆ®ºÎÅÍ Ã£À» ¿¹Á¤
-    while (x != T->nil && x->data != value) {//x°¡ nilÀÌ ¾Æ´Ï°í x°¡ value Áï Ã£Áö ¾Ê¾ÒÀ»¶§
-        if (x->data < value) {//Å©¸é
-            x = x->right;//¿À¸¥ÂÊÀ¸·Î
+    struct node* x = T->root;//ë£¨íŠ¸ë¶€í„° ì°¾ì„ ì˜ˆì •
+    while (x != T->nil && x->data != value) {//xê°€ nilì´ ì•„ë‹ˆê³  xê°€ value ì¦‰ ì°¾ì§€ ì•Šì•˜ì„ë•Œ
+        if (x->data < value) {//í¬ë©´
+            x = x->right;//ì˜¤ë¥¸ìª½ìœ¼ë¡œ
         }
         else {
-            x = x->left;//¾Æ´Ï¸é ¿ŞÂÊÀ¸·Î
+            x = x->left;//ì•„ë‹ˆë©´ ì™¼ìª½ìœ¼ë¡œ
         }
     }
-    if (x != T->nil) {//Ã£¾ÒÀ¸¸é ±× node ¸®ÅÏ
+    if (x != T->nil) {//ì°¾ì•˜ìœ¼ë©´ ê·¸ node ë¦¬í„´
         return x;
     }
-    else {//¾øÀ¸¸é NULL
+    else {//ì—†ìœ¼ë©´ NULL
         return NULL;
     }
 }
 
-// ·¹µå-ºí·¢ Æ®¸® »èÁ¦ ÈÄ ¼Ó¼º º¹±¸ ÇÔ¼ö
+// ë ˆë“œ-ë¸”ë™ íŠ¸ë¦¬ ì‚­ì œ í›„ ì†ì„± ë³µêµ¬ í•¨ìˆ˜
 void RBDeleteFixup(rbtree* T, struct node* x) {
-    while (x != T->root && x->color == 0) { // x°¡ ·çÆ®°¡ ¾Æ´Ï°í °ËÀº»öÀÎ µ¿¾È ¹İº¹
-        if (x == x->p->left) { // x°¡ ºÎ¸ğÀÇ ¿ŞÂÊ ÀÚ½ÄÀÌ¸é
-            struct node* w = x->p->right; // w´Â xÀÇ ÇüÁ¦ ³ëµå
-            if (w->color == 1) { // ÇüÁ¦ ³ëµå°¡ »¡°£»öÀÌ¸é
-                w->color = 0; // ÇüÁ¦¸¦ °ËÀº»öÀ¸·Î º¯°æ
-                x->p->color = 1; // ºÎ¸ğ¸¦ »¡°£»öÀ¸·Î º¯°æ
-                LeftR(T, x->p); // ÁÂÈ¸Àü
-                w = x->p->right; // »õ·Î¿î ÇüÁ¦ ¼³Á¤
+    while (x != T->root && x->color == 0) { // xê°€ ë£¨íŠ¸ê°€ ì•„ë‹ˆê³  ê²€ì€ìƒ‰ì¸ ë™ì•ˆ ë°˜ë³µ
+        if (x == x->p->left) { // xê°€ ë¶€ëª¨ì˜ ì™¼ìª½ ìì‹ì´ë©´
+            struct node* w = x->p->right; // wëŠ” xì˜ í˜•ì œ ë…¸ë“œ
+            if (w->color == 1) { // í˜•ì œ ë…¸ë“œê°€ ë¹¨ê°„ìƒ‰ì´ë©´
+                w->color = 0; // í˜•ì œë¥¼ ê²€ì€ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                x->p->color = 1; // ë¶€ëª¨ë¥¼ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                LeftR(T, x->p); // ì¢ŒíšŒì „
+                w = x->p->right; // ìƒˆë¡œìš´ í˜•ì œ ì„¤ì •
             }
-            if (w->left->color == 0 && w->right->color == 0) { // ÇüÁ¦ÀÇ µÎ ÀÚ½ÄÀÌ ¸ğµÎ °ËÀº»öÀÌ¸é
-                w->color = 1; // ÇüÁ¦¸¦ »¡°£»öÀ¸·Î º¯°æ
-                x = x->p; // x¸¦ ºÎ¸ğ·Î ¼³Á¤
+            if (w->left->color == 0 && w->right->color == 0) { // í˜•ì œì˜ ë‘ ìì‹ì´ ëª¨ë‘ ê²€ì€ìƒ‰ì´ë©´
+                w->color = 1; // í˜•ì œë¥¼ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                x = x->p; // xë¥¼ ë¶€ëª¨ë¡œ ì„¤ì •
             }
             else {
-                if (w->right->color == 0) { // ÇüÁ¦ÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÌ °ËÀº»öÀÌ¸é
-                    w->left->color = 0; // ÇüÁ¦ÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» °ËÀº»öÀ¸·Î º¯°æ
-                    w->color = 1; // ÇüÁ¦¸¦ »¡°£»öÀ¸·Î º¯°æ
-                    RightR(T, w); // ¿ìÈ¸Àü
-                    w = x->p->right; // »õ·Î¿î ÇüÁ¦ ¼³Á¤
+                if (w->right->color == 0) { // í˜•ì œì˜ ì˜¤ë¥¸ìª½ ìì‹ì´ ê²€ì€ìƒ‰ì´ë©´
+                    w->left->color = 0; // í˜•ì œì˜ ì™¼ìª½ ìì‹ì„ ê²€ì€ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                    w->color = 1; // í˜•ì œë¥¼ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                    RightR(T, w); // ìš°íšŒì „
+                    w = x->p->right; // ìƒˆë¡œìš´ í˜•ì œ ì„¤ì •
                 }
-                w->color = x->p->color; // ÇüÁ¦¸¦ ºÎ¸ğÀÇ »öÀ¸·Î º¯°æ
-                x->p->color = 0; // ºÎ¸ğ¸¦ °ËÀº»öÀ¸·Î º¯°æ
-                w->right->color = 0; // ÇüÁ¦ÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» °ËÀº»öÀ¸·Î º¯°æ
-                LeftR(T, x->p); // ÁÂÈ¸Àü
-                x = T->root; // x¸¦ ·çÆ®·Î ¼³Á¤
+                w->color = x->p->color; // í˜•ì œë¥¼ ë¶€ëª¨ì˜ ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                x->p->color = 0; // ë¶€ëª¨ë¥¼ ê²€ì€ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                w->right->color = 0; // í˜•ì œì˜ ì˜¤ë¥¸ìª½ ìì‹ì„ ê²€ì€ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                LeftR(T, x->p); // ì¢ŒíšŒì „
+                x = T->root; // xë¥¼ ë£¨íŠ¸ë¡œ ì„¤ì •
             }
         }
-        else { // x°¡ ºÎ¸ğÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÌ¸é
-            struct node* w = x->p->left; // w´Â xÀÇ ÇüÁ¦ ³ëµå
-            if (w->color == 1) { // ÇüÁ¦ ³ëµå°¡ »¡°£»öÀÌ¸é
-                w->color = 0; // ÇüÁ¦¸¦ °ËÀº»öÀ¸·Î º¯°æ
-                x->p->color = 1; // ºÎ¸ğ¸¦ »¡°£»öÀ¸·Î º¯°æ
-                RightR(T, x->p); // ¿ìÈ¸Àü
-                w = x->p->left; // »õ·Î¿î ÇüÁ¦ ¼³Á¤
+        else { // xê°€ ë¶€ëª¨ì˜ ì˜¤ë¥¸ìª½ ìì‹ì´ë©´
+            struct node* w = x->p->left; // wëŠ” xì˜ í˜•ì œ ë…¸ë“œ
+            if (w->color == 1) { // í˜•ì œ ë…¸ë“œê°€ ë¹¨ê°„ìƒ‰ì´ë©´
+                w->color = 0; // í˜•ì œë¥¼ ê²€ì€ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                x->p->color = 1; // ë¶€ëª¨ë¥¼ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                RightR(T, x->p); // ìš°íšŒì „
+                w = x->p->left; // ìƒˆë¡œìš´ í˜•ì œ ì„¤ì •
             }
-            if (w->right->color == 0 && w->left->color == 0) { // ÇüÁ¦ÀÇ µÎ ÀÚ½ÄÀÌ ¸ğµÎ °ËÀº»öÀÌ¸é
-                w->color = 1; // ÇüÁ¦¸¦ »¡°£»öÀ¸·Î º¯°æ
-                x = x->p; // x¸¦ ºÎ¸ğ·Î ¼³Á¤
+            if (w->right->color == 0 && w->left->color == 0) { // í˜•ì œì˜ ë‘ ìì‹ì´ ëª¨ë‘ ê²€ì€ìƒ‰ì´ë©´
+                w->color = 1; // í˜•ì œë¥¼ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                x = x->p; // xë¥¼ ë¶€ëª¨ë¡œ ì„¤ì •
             }
             else {
-                if (w->left->color == 0) { // ÇüÁ¦ÀÇ ¿ŞÂÊ ÀÚ½ÄÀÌ °ËÀº»öÀÌ¸é
-                    w->right->color = 0; // ÇüÁ¦ÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» °ËÀº»öÀ¸·Î º¯°æ
-                    w->color = 1; // ÇüÁ¦¸¦ »¡°£»öÀ¸·Î º¯°æ
-                    LeftR(T, w); // ÁÂÈ¸Àü
-                    w = x->p->left; // »õ·Î¿î ÇüÁ¦ ¼³Á¤
+                if (w->left->color == 0) { // í˜•ì œì˜ ì™¼ìª½ ìì‹ì´ ê²€ì€ìƒ‰ì´ë©´
+                    w->right->color = 0; // í˜•ì œì˜ ì˜¤ë¥¸ìª½ ìì‹ì„ ê²€ì€ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                    w->color = 1; // í˜•ì œë¥¼ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                    LeftR(T, w); // ì¢ŒíšŒì „
+                    w = x->p->left; // ìƒˆë¡œìš´ í˜•ì œ ì„¤ì •
                 }
-                w->color = x->p->color; // ÇüÁ¦¸¦ ºÎ¸ğÀÇ »öÀ¸·Î º¯°æ
-                x->p->color = 0; // ºÎ¸ğ¸¦ °ËÀº»öÀ¸·Î º¯°æ
-                w->left->color = 0; // ÇüÁ¦ÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» °ËÀº»öÀ¸·Î º¯°æ
-                RightR(T, x->p); // ¿ìÈ¸Àü
-                x = T->root; // x¸¦ ·çÆ®·Î ¼³Á¤
+                w->color = x->p->color; // í˜•ì œë¥¼ ë¶€ëª¨ì˜ ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                x->p->color = 0; // ë¶€ëª¨ë¥¼ ê²€ì€ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                w->left->color = 0; // í˜•ì œì˜ ì™¼ìª½ ìì‹ì„ ê²€ì€ìƒ‰ìœ¼ë¡œ ë³€ê²½
+                RightR(T, x->p); // ìš°íšŒì „
+                x = T->root; // xë¥¼ ë£¨íŠ¸ë¡œ ì„¤ì •
             }
         }
     }
-    x->color = 0; // x¸¦ °ËÀº»öÀ¸·Î ¼³Á¤
+    x->color = 0; // xë¥¼ ê²€ì€ìƒ‰ìœ¼ë¡œ ì„¤ì •
 }
 
-// ·¹µå-ºí·¢ Æ®¸®¿¡¼­ ³ëµå¸¦ »èÁ¦ÇÏ´Â ÇÔ¼ö
+// ë ˆë“œ-ë¸”ë™ íŠ¸ë¦¬ì—ì„œ ë…¸ë“œë¥¼ ì‚­ì œí•˜ëŠ” í•¨ìˆ˜
 void RBDelete(rbtree* T, struct node* z) {
-    struct node* y = z; // y¸¦ »èÁ¦ÇÒ ³ëµå·Î ¼³Á¤
+    struct node* y = z; // yë¥¼ ì‚­ì œí•  ë…¸ë“œë¡œ ì„¤ì •
     struct node* x;
-    int y_original_color = y->color; // yÀÇ ¿ø·¡ »öÀ» ÀúÀå
-    if (z->left == T->nil) { // zÀÇ ¿ŞÂÊ ÀÚ½ÄÀÌ nilÀÌ¸é
-        x = z->right; // x¸¦ zÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ¸·Î ¼³Á¤
-        RBTransplant(T, z, z->right); // z¸¦ zÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ¸·Î ±³Ã¼
+    int y_original_color = y->color; // yì˜ ì›ë˜ ìƒ‰ì„ ì €ì¥
+    if (z->left == T->nil) { // zì˜ ì™¼ìª½ ìì‹ì´ nilì´ë©´
+        x = z->right; // xë¥¼ zì˜ ì˜¤ë¥¸ìª½ ìì‹ìœ¼ë¡œ ì„¤ì •
+        RBTransplant(T, z, z->right); // zë¥¼ zì˜ ì˜¤ë¥¸ìª½ ìì‹ìœ¼ë¡œ êµì²´
     }
-    else if (z->right == T->nil) { // zÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÌ nilÀÌ¸é
-        x = z->left; // x¸¦ zÀÇ ¿ŞÂÊ ÀÚ½ÄÀ¸·Î ¼³Á¤
-        RBTransplant(T, z, z->left); // z¸¦ zÀÇ ¿ŞÂÊ ÀÚ½ÄÀ¸·Î ±³Ã¼
+    else if (z->right == T->nil) { // zì˜ ì˜¤ë¥¸ìª½ ìì‹ì´ nilì´ë©´
+        x = z->left; // xë¥¼ zì˜ ì™¼ìª½ ìì‹ìœ¼ë¡œ ì„¤ì •
+        RBTransplant(T, z, z->left); // zë¥¼ zì˜ ì™¼ìª½ ìì‹ìœ¼ë¡œ êµì²´
     }
     else {
-        y = TreeMinimum(T, z->right); // y¸¦ zÀÇ ¿À¸¥ÂÊ ¼­ºêÆ®¸®ÀÇ ÃÖ¼Ò°ªÀ¸·Î ¼³Á¤
-        y_original_color = y->color; // yÀÇ ¿ø·¡ »öÀ» ÀúÀå
-        x = y->right; // x¸¦ yÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ¸·Î ¼³Á¤
-        if (y->p == z) { // yÀÇ ºÎ¸ğ°¡ zÀÌ¸é
-            x->p = y; // xÀÇ ºÎ¸ğ¸¦ y·Î ¼³Á¤
+        y = TreeMinimum(T, z->right); // yë¥¼ zì˜ ì˜¤ë¥¸ìª½ ì„œë¸ŒíŠ¸ë¦¬ì˜ ìµœì†Œê°’ìœ¼ë¡œ ì„¤ì •
+        y_original_color = y->color; // yì˜ ì›ë˜ ìƒ‰ì„ ì €ì¥
+        x = y->right; // xë¥¼ yì˜ ì˜¤ë¥¸ìª½ ìì‹ìœ¼ë¡œ ì„¤ì •
+        if (y->p == z) { // yì˜ ë¶€ëª¨ê°€ zì´ë©´
+            x->p = y; // xì˜ ë¶€ëª¨ë¥¼ yë¡œ ì„¤ì •
         }
         else {
-            RBTransplant(T, y, y->right); // y¸¦ yÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ¸·Î ±³Ã¼
-            y->right = z->right; // yÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» zÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ¸·Î ¼³Á¤
-            y->right->p = y; // yÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÇ ºÎ¸ğ¸¦ y·Î ¼³Á¤
+            RBTransplant(T, y, y->right); // yë¥¼ yì˜ ì˜¤ë¥¸ìª½ ìì‹ìœ¼ë¡œ êµì²´
+            y->right = z->right; // yì˜ ì˜¤ë¥¸ìª½ ìì‹ì„ zì˜ ì˜¤ë¥¸ìª½ ìì‹ìœ¼ë¡œ ì„¤ì •
+            y->right->p = y; // yì˜ ì˜¤ë¥¸ìª½ ìì‹ì˜ ë¶€ëª¨ë¥¼ yë¡œ ì„¤ì •
         }
-        RBTransplant(T, z, y); // z¸¦ y·Î ±³Ã¼
-        y->left = z->left; // yÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» zÀÇ ¿ŞÂÊ ÀÚ½ÄÀ¸·Î ¼³Á¤
-        y->left->p = y; // yÀÇ ¿ŞÂÊ ÀÚ½ÄÀÇ ºÎ¸ğ¸¦ y·Î ¼³Á¤
-        y->color = z->color; // yÀÇ »öÀ» zÀÇ »öÀ¸·Î ¼³Á¤
+        RBTransplant(T, z, y); // zë¥¼ yë¡œ êµì²´
+        y->left = z->left; // yì˜ ì™¼ìª½ ìì‹ì„ zì˜ ì™¼ìª½ ìì‹ìœ¼ë¡œ ì„¤ì •
+        y->left->p = y; // yì˜ ì™¼ìª½ ìì‹ì˜ ë¶€ëª¨ë¥¼ yë¡œ ì„¤ì •
+        y->color = z->color; // yì˜ ìƒ‰ì„ zì˜ ìƒ‰ìœ¼ë¡œ ì„¤ì •
     }
-    free(z); // zÀÇ ¸Ş¸ğ¸® ÇØÁ¦
-    if (y_original_color == 0) { // yÀÇ ¿ø·¡ »öÀÌ °ËÀº»öÀÌ¸é
-        RBDeleteFixup(T, x); // »èÁ¦ ÈÄ ¼Ó¼º º¹±¸ ÇÔ¼ö È£Ãâ
+    free(z); // zì˜ ë©”ëª¨ë¦¬ í•´ì œ
+    if (y_original_color == 0) { // yì˜ ì›ë˜ ìƒ‰ì´ ê²€ì€ìƒ‰ì´ë©´
+        RBDeleteFixup(T, x); // ì‚­ì œ í›„ ì†ì„± ë³µêµ¬ í•¨ìˆ˜ í˜¸ì¶œ
     }
 }
 void print_tree(rbtree* T) {
-    struct node* stack[100]; // ½ºÅÃÀ» »ç¿ëÇÒ ¹è¿­
+    struct node* stack[100]; // ìŠ¤íƒì„ ì‚¬ìš©í•  ë°°ì—´
     int top = -1;
     struct node* current = T->root;
 
     while (current != T->nil || top != -1) {
         while (current != T->nil) {
-            // ÇöÀç ³ëµå Ãâ·Â
+            // í˜„ì¬ ë…¸ë“œ ì¶œë ¥
             printf("%d(%s) ", current->data, current->color == 0 ? "B" : "R");
-            stack[++top] = current; // ÇöÀç ³ëµå¸¦ ½ºÅÃ¿¡ ÀúÀå
-            current = current->left; // ¿ŞÂÊ ÀÚ½ÄÀ¸·Î ÀÌµ¿
+            stack[++top] = current; // í˜„ì¬ ë…¸ë“œë¥¼ ìŠ¤íƒì— ì €ì¥
+            current = current->left; // ì™¼ìª½ ìì‹ìœ¼ë¡œ ì´ë™
         }
-        current = stack[top--]; // ½ºÅÃ¿¡¼­ ³ëµå¸¦ ²¨³¿
-        current = current->right; // ¿À¸¥ÂÊ ÀÚ½ÄÀ¸·Î ÀÌµ¿
+        current = stack[top--]; // ìŠ¤íƒì—ì„œ ë…¸ë“œë¥¼ êº¼ëƒ„
+        current = current->right; // ì˜¤ë¥¸ìª½ ìì‹ìœ¼ë¡œ ì´ë™
     }
-    printf("\n"); // ÁÙ¹Ù²Ş
+    printf("\n"); // ì¤„ë°”ê¿ˆ
 }
 struct node* TreeSuccessor(struct rbtree* T, struct node* x) {
-    if (x->right != T->nil) {//successor´Â ¿À¸¥ÂÊ ¼­ºêÆ®¸®¿¡¼­ °¡Àå ÀÛÀº ¼öÀÌ¹Ç·Î
-        return TreeMinimum(T,x->right);//¿À¸¥ÂÊÀÇ ¼­ºêÆ®¸®ÀÇ ÃÖ¼Ú°ª
+    if (x->right != T->nil) {//successorëŠ” ì˜¤ë¥¸ìª½ ì„œë¸ŒíŠ¸ë¦¬ì—ì„œ ê°€ì¥ ì‘ì€ ìˆ˜ì´ë¯€ë¡œ
+        return TreeMinimum(T,x->right);//ì˜¤ë¥¸ìª½ì˜ ì„œë¸ŒíŠ¸ë¦¬ì˜ ìµœì†Ÿê°’
     }
     struct node* y = x->p;
-    while (y != NULL && x == y->right) {//¸¸¾à ¿À¸¥ÂÊ ¼­ºêÆ®¸®°¡ ¾ø´Ù¸é ±× ºÎ¸ğ
+    while (y != NULL && x == y->right) {//ë§Œì•½ ì˜¤ë¥¸ìª½ ì„œë¸ŒíŠ¸ë¦¬ê°€ ì—†ë‹¤ë©´ ê·¸ ë¶€ëª¨
         x = y;
         y = y->p;
     }
@@ -312,11 +312,11 @@ struct node* TreeSuccessor(struct rbtree* T, struct node* x) {
 }
 
 struct node* TreePredecessor(struct rbtree* T, struct node* x) {
-    if (x->left != T->nil) {//predecessor´Â ¿ŞÂÊ ¼­ºêÆ®¸®¿¡¼­ °¡Àå Å« ¼öÀÌ¹Ç·Î
-        return TreeMaximum(T, x->left);//¿À¸¥ÂÊÀÇ ¼­ºêÆ®¸®ÀÇ ÃÖ¼Ú°ª
+    if (x->left != T->nil) {//predecessorëŠ” ì™¼ìª½ ì„œë¸ŒíŠ¸ë¦¬ì—ì„œ ê°€ì¥ í° ìˆ˜ì´ë¯€ë¡œ
+        return TreeMaximum(T, x->left);//ì˜¤ë¥¸ìª½ì˜ ì„œë¸ŒíŠ¸ë¦¬ì˜ ìµœì†Ÿê°’
     }
     struct node* y = x->p;
-    while (y != NULL && x == y->left) {//¸¸¾à ¿ŞÂÊ ¼­ºêÆ®¸®°¡ ¾ø´Ù¸é ±× ºÎ¸ğ
+    while (y != NULL && x == y->left) {//ë§Œì•½ ì™¼ìª½ ì„œë¸ŒíŠ¸ë¦¬ê°€ ì—†ë‹¤ë©´ ê·¸ ë¶€ëª¨
         x = y;
         y = y->p;
     }
@@ -325,53 +325,53 @@ struct node* TreePredecessor(struct rbtree* T, struct node* x) {
 
 void MS(struct rbtree* T,struct node* root, FILE* file) {
     if (root == T->nil) {
-        return; // NULLÀÎ °æ¿ì ÇÔ¼ö Á¾·á
+        return; // NULLì¸ ê²½ìš° í•¨ìˆ˜ ì¢…ë£Œ
     }
-    MS(T,root->left, file); // ¿ŞÂÊ ¼­ºêÆ®¸®¸¦ ÁßÀ§ ¼øÈ¸
+    MS(T,root->left, file); // ì™¼ìª½ ì„œë¸ŒíŠ¸ë¦¬ë¥¼ ì¤‘ìœ„ ìˆœíšŒ
 
 
-    fprintf(file, "ÀÚ½Å %d  ", root->data);
+    fprintf(file, "ìì‹  %d  ", root->data);
 
 
     if (root->p != T->nil) {
-        fprintf(file, "ºÎ¸ğ %d  ", root->p->data);
+        fprintf(file, "ë¶€ëª¨ %d  ", root->p->data);
     }
-    else { fprintf(file, "ºÎ¸ğ nil  "); }
+    else { fprintf(file, "ë¶€ëª¨ nil  "); }
 
 
     if (root->right != T->nil) {
-        fprintf(file, "¿À¸¥ ÀÚ½Ä%d  ", root->right->data);
+        fprintf(file, "ì˜¤ë¥¸ ìì‹%d  ", root->right->data);
     }
-    else { fprintf(file, "¿À¸¥ ÀÚ½Ä nil  "); }
+    else { fprintf(file, "ì˜¤ë¥¸ ìì‹ nil  "); }
 
 
     if (root->left != T->nil) {
-        fprintf(file, "¿Ş ÀÚ½Ä %d  ", root->left->data);
+        fprintf(file, "ì™¼ ìì‹ %d  ", root->left->data);
     }
-    else { fprintf(file, "¿Ş ÀÚ½Ä nil  "); }
+    else { fprintf(file, "ì™¼ ìì‹ nil  "); }
 
 
 
 
     if (root->color == 1) {
-        fprintf(file, "»¡°­\n");
+        fprintf(file, "ë¹¨ê°•\n");
     }
-    else { fprintf(file, "°ËÁ¤\n"); }
+    else { fprintf(file, "ê²€ì •\n"); }
 
-    // ÇöÀç ³ëµåÀÇ µ¥ÀÌÅÍ¸¦ ÆÄÀÏ¿¡ ÀúÀå
-    MS(T,root->right, file); // ¿À¸¥ÂÊ ¼­ºêÆ®¸®¸¦ ÁßÀ§ ¼øÈ¸
+    // í˜„ì¬ ë…¸ë“œì˜ ë°ì´í„°ë¥¼ íŒŒì¼ì— ì €ì¥
+    MS(T,root->right, file); // ì˜¤ë¥¸ìª½ ì„œë¸ŒíŠ¸ë¦¬ë¥¼ ì¤‘ìœ„ ìˆœíšŒ
 }
 
-// Æ®¸®ÀÇ ÁßÀ§ ¼øÈ¸¸¦ È£ÃâÇÏ¿© µ¥ÀÌÅÍ¸¦ ÆÄÀÏ¿¡ ÀúÀåÇÏ´Â ÇÔ¼ö
+// íŠ¸ë¦¬ì˜ ì¤‘ìœ„ ìˆœíšŒë¥¼ í˜¸ì¶œí•˜ì—¬ ë°ì´í„°ë¥¼ íŒŒì¼ì— ì €ì¥í•˜ëŠ” í•¨ìˆ˜
 void txtRB(rbtree* T, const char* filename) {
     FILE* file;
-    fopen_s(&file, "202235440 ÀüÀº¼·.txt", "a"); // ÆÄÀÏÀ» ¾²±â ¸ğµå·Î ¿­±â
+    fopen_s(&file, "ì´ë¦„.txt", "a"); // íŒŒì¼ì„ ì“°ê¸° ëª¨ë“œë¡œ ì—´ê¸°
     if (file == NULL) {
-        printf("ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù.\n");
+        printf("íŒŒì¼ì„ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n");
         return;
     }
-    MS(T,T->root, file); // ÁßÀ§ ¼øÈ¸ ÇÔ¼ö È£Ãâ
-    fclose(file); // ÆÄÀÏ ´İ±â
+    MS(T,T->root, file); // ì¤‘ìœ„ ìˆœíšŒ í•¨ìˆ˜ í˜¸ì¶œ
+    fclose(file); // íŒŒì¼ ë‹«ê¸°
 }
 
 
@@ -386,65 +386,65 @@ int main() {
     struct node* next;
     struct node* prev;
     struct node* new_node;
-    do {//do while¹®À» ÀÌ¿ëÇØ ¸ÕÀú Ãâ·ÂÀ» ÇÏ°í ÀÛµ¿ÈÄ Á¤Áö ½ÅÈ£¸¦ º¸°í Á¤Áö ½ÅÈ£°¡ ¾Æ´Ò½Ã ´Ù½Ã ½ÇÇàÇÏµµ·Ï
+    do {//do whileë¬¸ì„ ì´ìš©í•´ ë¨¼ì € ì¶œë ¥ì„ í•˜ê³  ì‘ë™í›„ ì •ì§€ ì‹ í˜¸ë¥¼ ë³´ê³  ì •ì§€ ì‹ í˜¸ê°€ ì•„ë‹ì‹œ ë‹¤ì‹œ ì‹¤í–‰í•˜ë„ë¡
         printf("\ns,min,max,n,p,i,t\n");
         scanf_s("%s", command, (unsigned)sizeof(command));
         if (command[0] == 's') {
-            printf("¹«¾ùÀ» Ã£À¸½Ã°Ú½À´Ï±î?: ");
+            printf("ë¬´ì—‡ì„ ì°¾ìœ¼ì‹œê² ìŠµë‹ˆê¹Œ?: ");
             scanf_s("%d", &value, (unsigned)sizeof(value));
-            if (SearchRBtree(&T, value) == NULL) { printf("¾øÀ½"); }//ÇÔ¼ö ½ÇÇàÀ¸·Î ¾øÀ¸¸é ¾øÀ½
-            else if (SearchRBtree(&T, value) != NULL) { printf("ÀÖÀ½"); }//ÇÔ¼ö ½ÇÇàÀ¸·Î ÀÖÀ¸¸é ÀÖÀ½
+            if (SearchRBtree(&T, value) == NULL) { printf("ì—†ìŒ"); }//í•¨ìˆ˜ ì‹¤í–‰ìœ¼ë¡œ ì—†ìœ¼ë©´ ì—†ìŒ
+            else if (SearchRBtree(&T, value) != NULL) { printf("ìˆìŒ"); }//í•¨ìˆ˜ ì‹¤í–‰ìœ¼ë¡œ ìˆìœ¼ë©´ ìˆìŒ
         }
         if (command[0] == 'm') {
             if (command[1] == 'i') {
                 if (T.root != T.nil) {
-                    printf("ÃÖ¼Ò°ª: %d\n", TreeMinimum(&T, T.root)->data);
+                    printf("ìµœì†Œê°’: %d\n", TreeMinimum(&T, T.root)->data);
                 }
                 else {
-                    printf("Æ®¸®°¡ ºñ¾ú½À´Ï´Ùy.\n");
+                    printf("íŠ¸ë¦¬ê°€ ë¹„ì—ˆìŠµë‹ˆë‹¤y.\n");
                 }
             }
             if (command[1] == 'a') {
                 if (T.root != T.nil) {
-                    printf("ÃÖ´ñ°ª: %d\n", TreeMaximum(&T, T.root)->data);
+                    printf("ìµœëŒ“ê°’: %d\n", TreeMaximum(&T, T.root)->data);
                 }
                 else {
-                    printf("Æ®¸®°¡ ºñ¾ú½À´Ï´Ù.\n");
+                    printf("íŠ¸ë¦¬ê°€ ë¹„ì—ˆìŠµë‹ˆë‹¤.\n");
                 }
             }
         }
         if (command[0] == 'n') {
-        printf("¾î¶²°ªÀÇ ´ÙÀ½°ªÀ» Ã£À¸½Ã°Ú½À´Ï±î?: ");
+        printf("ì–´ë–¤ê°’ì˜ ë‹¤ìŒê°’ì„ ì°¾ìœ¼ì‹œê² ìŠµë‹ˆê¹Œ?: ");
         scanf_s("%d", &value, (unsigned)sizeof(value));
         next = TreeSuccessor(&T, SearchRBtree(&T, value));
         if (next != T.nil) {
-            printf(" % dÀÇ ´ÙÀ½ °ªÀº: % d\n", value, next->data);
+            printf(" % dì˜ ë‹¤ìŒ ê°’ì€: % d\n", value, next->data);
         }
         else {
-            printf("´ÙÀ½°ªÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.\n");
+            printf("ë‹¤ìŒê°’ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
             }
         }
         if (command[0] == 'p') {
-        printf("¾î¶²°ªÀÇ ÀÌÀü°ªÀ» Ã£À¸½Ã°Ú½À´Ï±î?: ");
+        printf("ì–´ë–¤ê°’ì˜ ì´ì „ê°’ì„ ì°¾ìœ¼ì‹œê² ìŠµë‹ˆê¹Œ?: ");
         scanf_s("%d", &value, (unsigned)sizeof(value));
         prev = TreePredecessor(&T, SearchRBtree(&T, value));
         if (prev != T.nil) {
-            printf("%dÀÇ ÀÌÀü°ªÀº: %d\n", value, prev->data);
+            printf("%dì˜ ì´ì „ê°’ì€: %d\n", value, prev->data);
         }
         else {
-            printf("ÀÌÀü °ªÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.\n");
+            printf("ì´ì „ ê°’ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
             }
         }
         if (command[0] == 'i') {
-            printf("¾î¶²°ªÀ» Ãß°¡ÇÏ½Ã°Ú½À´Ï±î?: ");
+            printf("ì–´ë–¤ê°’ì„ ì¶”ê°€í•˜ì‹œê² ìŠµë‹ˆê¹Œ?: ");
             scanf_s("%d", &value, (unsigned)sizeof(value));
             new_node = create_node(&T,value, 1);
             RBInsert(&T, new_node);
-            printf("%d ¸¦ Æ®¸®¿¡ ³Ö¾ú½À´Ï´Ù.\n", value);
+            printf("%d ë¥¼ íŠ¸ë¦¬ì— ë„£ì—ˆìŠµë‹ˆë‹¤.\n", value);
         }
         if (command[0] == 't') {
-            printf("Á¾·á.\n");
-            txtRB(&T, "ÀüÀº¼·");
+            printf("ì¢…ë£Œ.\n");
+            txtRB(&T, "ì „ì€ì„­");
     }
 } while (command[0] != 't');
 
